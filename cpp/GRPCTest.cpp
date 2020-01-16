@@ -36,12 +36,11 @@ static void HandleDiscordJoinRequest(const DiscordUser* request)
 }
 
 int StartDiscordStatus(lua_State* state) {
-	GarrysMod::Lua::ILuaBase* LUA = state->luabase;
+	const GarrysMod::Lua::ILuaBase* LUA = state->luabase;
 	const char* appid = LUA->GetString(1);
 
 	// Discord RPC
-	DiscordEventHandlers handlers;
-	memset(&handlers, 0, sizeof(handlers));
+	DiscordEventHandlers handlers{};
 
 	handlers.ready = HandleDiscordReady;
 	handlers.disconnected = HandleDiscordDisconnected;
@@ -65,8 +64,7 @@ int UpdateDiscordStatus_Basic(lua_State* state) {
 	const char* dSubtitle = LUA->GetString(4);
 
 	// Prepare rich presence
-	DiscordRichPresence discordP;
-	memset(&discordP, 0, sizeof(discordP));
+	DiscordRichPresence discordP{};
 
 	// Update the rich presence
 	discordP.state = dState;
@@ -87,8 +85,8 @@ int UpdateDiscordStatus_Players(lua_State* state) {
 	const char* dDetails = LUA->GetString(2);
 	const char* dImage = LUA->GetString(3);
 	const char* dSubtitle = LUA->GetString(4);
-	int dPlayers = LUA->GetNumber(5);
-	int dMaxPlayers = LUA->GetNumber(6);
+	const int dPlayers = LUA->GetNumber(5);
+	const int dMaxPlayers = LUA->GetNumber(6);
 
 	// Prepare rich presence
 	DiscordRichPresence discordP;
@@ -116,9 +114,9 @@ int UpdateDiscordStatus_Elapsed(lua_State* state) {
 	const char* dDetails = LUA->GetString(2);
 	const char* dImage = LUA->GetString(3);
 	const char* dSubtitle = LUA->GetString(4);
-	int dPlayers = LUA->GetNumber(5);
-	int dMaxPlayers = LUA->GetNumber(6);
-	int64_t dTime = LUA->GetNumber(7);
+	const int dPlayers = LUA->GetNumber(5);
+	const int dMaxPlayers = LUA->GetNumber(6);
+	const int64_t dTime = LUA->GetNumber(7);
 
 	// Prepare rich presence
 	DiscordRichPresence discordP;
