@@ -1,6 +1,6 @@
 // This requires a special module to be installed before it works correctly
 // Sorry to disappoint you
-if not file.Exists('lua/bin/gmcl_fluffydiscord_win32.dll', 'GAME') then return end
+if not file.Exists('lua/bin/gmcl_fluffydiscord_win32.dll', 'GAME') and not file.Exists('lua/bin/gmcl_fluffydiscord_win64.dll', 'GAME') then return end
 require('fluffydiscord')
 
 // Here's some nice configuration stuff
