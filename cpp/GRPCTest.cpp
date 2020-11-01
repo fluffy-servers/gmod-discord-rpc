@@ -1,3 +1,4 @@
+#define GMMODULE
 #include "stdafx.h"
 #include "Interface.h"
 #include "discord_rpc.h"
@@ -35,8 +36,8 @@ static void HandleDiscordJoinRequest(const DiscordUser* request)
 	// Not implemented
 }
 
-int StartDiscordStatus(lua_State* state) {
-	const GarrysMod::Lua::ILuaBase* LUA = state->luabase;
+LUA_FUNCTION( StartDiscordStatus ) {
+	
 	const char* appid = LUA->GetString(1);
 
 	// Discord RPC
@@ -54,8 +55,7 @@ int StartDiscordStatus(lua_State* state) {
 	return 0;
 }
 
-int UpdateDiscordStatus_Basic(lua_State* state) {
-	GarrysMod::Lua::ILuaBase* LUA = state->luabase;
+LUA_FUNCTION( UpdateDiscordStatus_Basic ) {
 
 	// Read the arguments from the lua function
 	const char* dState = LUA->GetString(1);
@@ -77,8 +77,7 @@ int UpdateDiscordStatus_Basic(lua_State* state) {
 	return 0;
 }
 
-int UpdateDiscordStatus_Players(lua_State* state) {
-	GarrysMod::Lua::ILuaBase* LUA = state->luabase;
+LUA_FUNCTION( UpdateDiscordStatus_Players ) {
 
 	// Read the arguments from the lua function
 	const char* dState = LUA->GetString(1);
@@ -106,8 +105,7 @@ int UpdateDiscordStatus_Players(lua_State* state) {
 	return 0;
 }
 
-int UpdateDiscordStatus_Elapsed(lua_State* state) {
-	GarrysMod::Lua::ILuaBase* LUA = state->luabase;
+LUA_FUNCTION( UpdateDiscordStatus_Elapsed) {
 
 	// Read the arguments from the lua function
 	const char* dState = LUA->GetString(1);
