@@ -1,10 +1,8 @@
 #define GMMODULE
-#include "stdafx.h"
-#include "Interface.h"
+#include "GarrysMod/Lua/Interface.h"
 #include "discord_rpc.h"
-#include <string>
-#pragma comment(lib, "discord-rpc.lib")
-//discord::Core* core{};
+#include <stdio.h>
+#include <string.h>
 
 static void HandleDiscordReady(const DiscordUser* connectedUser)
 {
