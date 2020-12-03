@@ -3,35 +3,45 @@
 #include "discord_rpc.h"
 #include <stdio.h>
 #include <string.h>
+#include <utility>
+
+DiscordUser cbConUser;
+std::pair<int, char> cbDisconnected;
+std::pair<int, char> cbError;
+char cbJoinSecret;
+char cbSpectateSecret;
+DiscordUser cbJoinRequest;
 
 static void HandleDiscordReady(const DiscordUser* connectedUser)
 {
-	// Not implemented
+	cbConUser = *connectedUser;
 }
 
 static void HandleDiscordDisconnected(int errcode, const char* message)
 {
-	// Not implemented
+	cbDisconnected.first = errcode;
+	cbDisconnected.second = *message;
 }
 
 static void HandleDiscordError(int errcode, const char* message)
 {
-	// Not implemented
+	cbError.first = errcode;
+	cbError.second = *message;
 }
 
 static void HandleDiscordJoin(const char* secret)
 {
-	// Not implemented
+	cbJoinSecret = *secret;
 }
 
 static void HandleDiscordSpectate(const char* secret)
 {
-	// Not implemented
+	cbSpectateSecret = *secret;
 }
 
 static void HandleDiscordJoinRequest(const DiscordUser* request)
 {
-	// Not implemented
+	cbJoinRequest = *request;
 }
 
 LUA_FUNCTION( StartDiscordStatus ) {
