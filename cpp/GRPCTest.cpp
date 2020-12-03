@@ -137,6 +137,13 @@ LUA_FUNCTION( RunDiscordCallbacks ) {
 	return 0;
 }
 
+LUA_FUNCTION( DiscordRespond ) {
+	const char* userid = LUA->GetString(1);
+	const int reply = LUA->GetNumber(2);
+	Discord_Respond(userid, reply);
+	return 0;
+}
+
 LUA_FUNCTION( UpdateDiscordStatus_Basic ) {
 
 	// Read the arguments from the lua function
@@ -228,6 +235,11 @@ GMOD_MODULE_OPEN()
 	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(RunDiscordCallbacks);
     LUA->SetField(-2, "DiscordRPCRunCallbacks");
+    LUA->Pop();
+
+	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->PushCFunction(DiscordRespond);
+    LUA->SetField(-2, "DiscordRPCRespond");
     LUA->Pop();
 
 	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
