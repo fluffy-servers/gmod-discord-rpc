@@ -204,6 +204,9 @@ LUA_FUNCTION( UpdateDiscordStatus_Elapsed) {
 	const int dPlayers = LUA->GetNumber(5);
 	const int dMaxPlayers = LUA->GetNumber(6);
 	const int64_t dTime = LUA->GetNumber(7);
+	const char* dPartyId = LUA->GetString(8);
+	const char* dJoinSecret = LUA->GetString(9);
+	const char* dSpectateSecret = LUA->GetString(10);
 
 	// Prepare rich presence
 	DiscordRichPresence discordP;
@@ -214,10 +217,21 @@ LUA_FUNCTION( UpdateDiscordStatus_Elapsed) {
 	discordP.details = dDetails;
 	discordP.largeImageKey = dImage;
 	discordP.largeImageText = dSubtitle;
-	discordP.partyId = "hahalolparty";
+	if(dPartyId != NULL) {
+		discordP.partyId = dPartyId;
+	} else
+	{
+		discordP.partyId = "hahalolparty";
+	}
 	discordP.partySize = dPlayers;
 	discordP.partyMax = dMaxPlayers;
 	discordP.startTimestamp = dTime;
+	if(dJoinSecret != NULL) {
+		discordP.joinSecret = dJoinSecret;
+	}
+	if(dSpectateSecret != NULL) {
+		discordP.spectateSecret = dSpectateSecret;
+	}
 	Discord_UpdatePresence(&discordP);
 
 	// Return 0 arguments to lua
