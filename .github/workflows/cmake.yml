@@ -1,0 +1,77 @@
+name: CMake Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        config:
+        - {
+          name: "Windows 32Bit", artifact: "gmcl_fluffydiscord_win32.dll",
+          cmakeargs: "-A Win32"
+        }
+        - {
+          name: "Windows 64Bit", artifact: "gmcl_fluffydiscord_win64.dll",
+          cmakeargs: "-A x64"
+        }
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      env:
+        cmakeargs: ${{matrix.config.cmakeargs}}
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE/cpp $cmakeargs
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target fluffydiscord --config MinSizeRel
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{matrix.config.artifact}}
+        path: ${{runner.workspace}}\build\MinSizeRel\${{matrix.config.artifact}}
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Install package
+      run: |
+        sudo apt-get -y install gcc-multilib g++-multilib
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE/cpp
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target fluffydiscord
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: "gmcl_fluffydiscord_linux.dll"
+        path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux.dll
