@@ -76,7 +76,7 @@ jobs:
         name: "gmcl_fluffydiscord_linux.dll"
         path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux.dll
 
-    linux64:
+  linux64:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
