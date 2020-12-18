@@ -75,3 +75,29 @@ jobs:
       with:
         name: "gmcl_fluffydiscord_linux.dll"
         path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux.dll
+
+    linux64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE/cpp -D64BIT
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target fluffydiscord
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: "gmcl_fluffydiscord_linux64.dll"
+        path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux64.dll
