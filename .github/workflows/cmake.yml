@@ -89,7 +89,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE/cpp -D64BIT
+      run: cmake $GITHUB_WORKSPACE/cpp -D64BIT=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
