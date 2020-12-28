@@ -2,7 +2,11 @@ name: CMake Build
 
 on:
   push:
+    branches:
+    - master
   pull_request:
+    branches:
+    - master
 
 jobs:
   windows:
@@ -12,11 +16,11 @@ jobs:
       matrix:
         config:
         - {
-          name: "Windows 32Bit", artifact: "gmcl_fluffydiscord_win32.dll",
+          name: "Windows 32Bit", artifact: "gmcl_gdiscord_win32.dll",
           cmakeargs: "-A Win32"
         }
         - {
-          name: "Windows 64Bit", artifact: "gmcl_fluffydiscord_win64.dll",
+          name: "Windows 64Bit", artifact: "gmcl_gdiscord_win64.dll",
           cmakeargs: "-A x64"
         }
 
@@ -38,7 +42,7 @@ jobs:
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: cmake --build . --target fluffydiscord --config MinSizeRel
+      run: cmake --build . --target gdiscord --config MinSizeRel
 
     - name: Upload
       uses: actions/upload-artifact@v2
@@ -68,13 +72,13 @@ jobs:
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: cmake --build . --target fluffydiscord
+      run: cmake --build . --target gdiscord
 
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: "gmcl_fluffydiscord_linux.dll"
-        path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux.dll
+        name: "gmcl_gdiscord_linux.dll"
+        path: ${{runner.workspace}}/build/gmcl_gdiscord_linux.dll
 
   linux64:
     runs-on: ubuntu-latest
@@ -94,10 +98,10 @@ jobs:
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: cmake --build . --target fluffydiscord
+      run: cmake --build . --target gdiscord
 
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: "gmcl_fluffydiscord_linux64.dll"
-        path: ${{runner.workspace}}/build/gmcl_fluffydiscord_linux64.dll
+        name: "gmcl_gdiscord_linux64.dll"
+        path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
