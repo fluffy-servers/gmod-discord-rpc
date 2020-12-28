@@ -5,45 +5,66 @@
 #include <string.h>
 #include <utility>
 
-DiscordUser cbConUser;
-std::pair<int, char> cbDisconnected;
-std::pair<int, char> cbError;
-char cbJoinSecret;
-char cbSpectateSecret;
-DiscordUser cbJoinRequest;
-bool cbConUserTriggerd, cbDisconnectedTriggerd, cbErrorTriggerd, cbJoinTriggerd,
-    cbSpectateTriggerd, cbJoinRequestTriggerd;
-
 static void HandleDiscordReady(const DiscordUser *connectedUser) {
-    cbConUser = *connectedUser;
-    cbConUserTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordReady");
+    LUA->PushString(request.userId);
+    LUA->PushString(request.username);
+    LUA->PushString(request.discriminator);
+    LUA->PushString(request.avatar);
+    LUA->Call(5, 0);
 }
 
 static void HandleDiscordDisconnected(int errcode, const char *message) {
-    cbDisconnected.first = errcode;
-    cbDisconnected.second = *message;
-    cbDisconnectedTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordDisconnected");
+    LUA->PushNumber(errcode);
+    LUA->PushString(&message);
+    LUA->Call(3, 0);
 }
 
 static void HandleDiscordError(int errcode, const char *message) {
-    cbError.first = errcode;
-    cbError.second = *message;
-    cbConUserTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordError");
+    LUA->PushNumber(errcode);
+    LUA->PushString(&message);
+    LUA->Call(3, 0);
 }
 
 static void HandleDiscordJoin(const char *secret) {
-    cbJoinSecret = *secret;
-    cbJoinTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordJoin");
+    LUA->PushString(&secret);
+    LUA->Call(2, 0);
 }
 
 static void HandleDiscordSpectate(const char *secret) {
-    cbSpectateSecret = *secret;
-    cbSpectateTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordSpectate");
+    LUA->PushString(&secret);
+    LUA->Call(2, 0);
 }
 
 static void HandleDiscordJoinRequest(const DiscordUser *request) {
-    cbJoinRequest = *request;
-    cbJoinRequestTriggerd = true;
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->GetField(-2, "hook");
+    LUA->GetField(-1, "Run");
+    LUA->PushString("DiscordJoinRequest");
+    LUA->PushString(request.userId);
+    LUA->PushString(request.username);
+    LUA->PushString(request.discriminator);
+    LUA->PushString(request.avatar);
+    LUA->Call(5, 0);
 }
 
 LUA_FUNCTION(StartDiscordStatus) {
@@ -60,75 +81,13 @@ LUA_FUNCTION(StartDiscordStatus) {
     handlers.spectateGame = HandleDiscordSpectate;
     handlers.joinRequest = HandleDiscordJoinRequest;
 
-    Discord_Initialize(appid, &handlers, 1, 0);
+    Discord_Initialize(appid, &handlers, 1, "4000");
 
     return 0;
 }
 
 LUA_FUNCTION(RunDiscordCallbacks) {
     Discord_RunCallbacks();
-    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-    LUA->GetField(-1, "hook");
-    if (cbConUserTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordReady");
-        LUA->PushString(cbConUser.userId);
-        LUA->PushString(cbConUser.username);
-        LUA->PushString(cbConUser.discriminator);
-        LUA->PushString(cbConUser.avatar);
-        LUA->PushString(cbConUser.username);
-        LUA->Call(6, 0);
-        cbConUserTriggerd = false;
-    }
-
-    if (cbDisconnectedTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordDisconnected");
-        LUA->PushNumber(cbDisconnected.first);
-        LUA->PushString(&cbDisconnected.second);
-        LUA->Call(3, 0);
-        cbDisconnectedTriggerd = false;
-    }
-
-    if (cbErrorTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordError");
-        LUA->PushNumber(cbError.first);
-        LUA->PushString(&cbError.second);
-        LUA->Call(3, 0);
-        cbErrorTriggerd = false;
-    }
-
-    if (cbJoinTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordJoin");
-        LUA->PushString(&cbJoinSecret);
-        LUA->Call(2, 0);
-        cbJoinTriggerd = false;
-    }
-
-    if (cbSpectateTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordSpectate");
-        LUA->PushString(&cbSpectateSecret);
-        LUA->Call(2, 0);
-        cbSpectateTriggerd = false;
-    }
-
-    if (cbJoinRequestTriggerd) {
-        LUA->GetField(-1, "Run");
-        LUA->PushString("DiscordJoinRequest");
-        LUA->PushString(cbJoinRequest.userId);
-        LUA->PushString(cbJoinRequest.username);
-        LUA->PushString(cbJoinRequest.discriminator);
-        LUA->PushString(cbJoinRequest.avatar);
-        LUA->PushString(cbJoinRequest.username);
-        LUA->Call(6, 0);
-        cbJoinRequestTriggerd = false;
-    }
-
-    LUA->Pop(2);
-
     return 0;
 }
 
@@ -190,7 +149,6 @@ LUA_FUNCTION(UpdateDiscordStatus_Players) {
 }
 
 LUA_FUNCTION(UpdateDiscordStatus_Elapsed) {
-
     // Read the arguments from the lua function
     const char *dState = LUA->GetString(1);
     const char *dDetails = LUA->GetString(2);
@@ -236,32 +194,32 @@ GMOD_MODULE_OPEN() {
     // Create the functions
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(StartDiscordStatus);
-    LUA->SetField(-2, "DiscordRPCInitialize");
+    LUA->SetField(-2, "DiscordInitialize");
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(RunDiscordCallbacks);
-    LUA->SetField(-2, "DiscordRPCRunCallbacks");
+    LUA->SetField(-2, "DiscordRunCallbacks");
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(DiscordRespond);
-    LUA->SetField(-2, "DiscordRPCRespond");
+    LUA->SetField(-2, "DiscordRespond");
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(UpdateDiscordStatus_Basic);
-    LUA->SetField(-2, "DiscordRPCBasic");
+    LUA->SetField(-2, "DiscordBasic");
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(UpdateDiscordStatus_Players);
-    LUA->SetField(-2, "DiscordRPCPlayers");
+    LUA->SetField(-2, "DiscordPlayers");
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(UpdateDiscordStatus_Elapsed);
-    LUA->SetField(-2, "DiscordRPCTime");
+    LUA->SetField(-2, "DiscordTime");
     LUA->Pop();
 
     return 0;
