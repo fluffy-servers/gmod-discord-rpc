@@ -1,7 +1,7 @@
 -- This requires a special module to be installed before it works correctly
 -- Sorry to disappoint you
-if file.Find('lua/bin/gmcl_fluffydiscord_*.dll', 'GAME')[1] == nil then return end
-require('fluffydiscord')
+if file.Find('lua/bin/gmcl_gdiscord_*.dll', 'GAME')[1] == nil then return end
+require('gdiscord')
 
 -- Here's some nice configuration stuff
 local map_restrict = false -- Should a display default image be displayed if the map is not in a given list?
