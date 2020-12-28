@@ -1,10 +1,10 @@
-// This requires a special module to be installed before it works correctly
-// Sorry to disappoint you
+-- This requires a special module to be installed before it works correctly
+-- Sorry to disappoint you
 if file.Find('lua/bin/gmcl_fluffydiscord_*.dll', 'GAME')[1] == nil then return end
 require('fluffydiscord')
 
-// Here's some nice configuration stuff
-local map_restrict = false // Should a display default image be displayed if the map is not in a given list?
+-- Here's some nice configuration stuff
+local map_restrict = false -- Should a display default image be displayed if the map is not in a given list?
 local map_list = {
     gm_flatgrass = true,
     gm_construct = true
@@ -16,7 +16,7 @@ local refresh_time = 60
 local discord_start = discord_start or -1
 
 function DiscordUpdate()
-    // Determine what type of game is being played
+    -- Determine what type of game is being played
     local playing_message = ''
     if game.SinglePlayer() then
         playing_message = 'Singleplayer'
@@ -33,12 +33,12 @@ function DiscordUpdate()
         end
     end
     
-    // Determine the max number of players
+    -- Determine the max number of players
     local maxplayers = game.MaxPlayers()
     if game.SinglePlayer() then maxplayers = 0 end
     
-    // Handle map stuff
-    // See the config
+    -- Handle map stuff
+    -- See the config
     local map = game.GetMap()
     if map_restrict then
         if not map_list[map] then
