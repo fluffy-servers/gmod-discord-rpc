@@ -9,7 +9,7 @@ local map_list = {
     gm_flatgrass = true,
     gm_construct = true
 }
-local map_default = "default"
+local image_fallback = "default"
 local discord_id = "626155559779041331"
 local refresh_time = 60
 
@@ -17,35 +17,38 @@ local discord_start = discord_start or -1
 
 function DiscordUpdate()
     -- Determine what type of game is being played
-    local playing_message = ""
+    local rpc_data = {}
     if game.SinglePlayer() then
-        playing_message = "Singleplayer"
+        rpc_data["state"] = "Singleplayer"
     else
         local ip = game.GetIPAddress()
         if ip == "loopback" then
             if GetConVar("p2p_enabled"):GetBool() then
-                playing_message = "Peer 2 Peer"
+                rpc_data["state"] = "Peer 2 Peer"
             else
-                playing_message = "Local Server"
+                rpc_data["state"] = "Local Server"
             end
         else
-            playing_message = string.Replace(ip, ":27015", "")
+            rpc_data["state"] = string.Replace(ip, ":27015", "")
         end
     end
 
     -- Determine the max number of players
-    local maxplayers = game.MaxPlayers()
-    if game.SinglePlayer() then maxplayers = 0 end
+    rpc_data["partySize"] = player.GetCount()
+    rpc_data["partyMax"] = game.MaxPlayers()
+    if game.SinglePlayer() then rpc_data["partyMax"] = 0 end
 
     -- Handle map stuff
     -- See the config
-    local map = game.GetMap()
+    rpc_data["largeImageKey"] = game.GetMap()
+    rpc_data["largeImageText"] = game.GetMap()
     if map_restrict and not map_list[map] then
-        map = map_default
+        rpc_data["largeImageKey"] = image_fallback
     end
-    local gamemode = GAMEMODE.Name
+    rpc_data["details"] = GAMEMODE.Name
+    rpc_data["startTimestamp"] = discord_start
 
-    DiscordRPCTime(playing_message, gamemode, map, game.GetMap(), player.GetCount(), maxplayers, discord_start)
+    DiscordUpdateRPC(rpc_data)
 end
 
 hook.Add("Initialize", "UpdateDiscordStatus", function()
