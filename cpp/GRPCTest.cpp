@@ -139,96 +139,43 @@ LUA_FUNCTION(DiscordRespond) {
     return 0;
 }
 
-LUA_FUNCTION(UpdateDiscordStatus_Basic) {
-
-    // Read the arguments from the lua function
-    const char *dState = LUA->GetString(1);
-    const char *dDetails = LUA->GetString(2);
-    const char *dImage = LUA->GetString(3);
-    const char *dSubtitle = LUA->GetString(4);
-
-    // Prepare rich presence
-    DiscordRichPresence discordP{};
-
-    // Update the rich presence
-    discordP.state = dState;
-    discordP.details = dDetails;
-    discordP.largeImageKey = dImage;
-    discordP.largeImageText = dSubtitle;
-    Discord_UpdatePresence(&discordP);
-
-    // Return 0 arguments to lua
-    return 0;
-}
-
-LUA_FUNCTION(UpdateDiscordStatus_Players) {
-
-    // Read the arguments from the lua function
-    const char *dState = LUA->GetString(1);
-    const char *dDetails = LUA->GetString(2);
-    const char *dImage = LUA->GetString(3);
-    const char *dSubtitle = LUA->GetString(4);
-    const int dPlayers = LUA->GetNumber(5);
-    const int dMaxPlayers = LUA->GetNumber(6);
-
-    // Prepare rich presence
+LUA_FUNCTION(UpdateDiscordStatus) {
     DiscordRichPresence discordP;
     memset(&discordP, 0, sizeof(discordP));
+    LUA->GetField(1, "state");
+    discordP.state = LUA->GetString();
+    LUA->GetField(1, "details");
+    discordP.details = LUA->GetString();
+    LUA->GetField(1, "startTimestamp");
+    discordP.startTimestamp = LUA->GetNumber();
+    LUA->GetField(1, "endTimestamp");
+    discordP.endTimestamp = LUA->GetNumber();
+    LUA->GetField(1, "largeImageKey");
+    discordP.largeImageKey = LUA->GetString();
+    LUA->GetField(1, "largeImageText");
+    discordP.largeImageText = LUA->GetString();
+    LUA->GetField(1, "smallImageKey");
+    discordP.smallImageKey = LUA->GetString();
+    LUA->GetField(1, "smallImageText");
+    discordP.smallImageText = LUA->GetString();
+    LUA->GetField(1, "partyId");
+    discordP.partyId = LUA->GetString();
+    LUA->GetField(1, "partySize");
+    discordP.partySize = LUA->GetNumber();
+    LUA->GetField(1, "partyMax");
+    discordP.partyMax = LUA->GetNumber();
+    LUA->GetField(1, "partyPrivacy");
+    discordP.partyPrivacy = LUA->GetNumber();
+    LUA->GetField(1, "matchSecret");
+    discordP.matchSecret = LUA->GetString();
+    LUA->GetField(1, "joinSecret");
+    discordP.joinSecret = LUA->GetString();
+    LUA->GetField(1, "spectateSecret");
+    discordP.spectateSecret = LUA->GetString();
+    LUA->GetField(1, "instance");
+    discordP.instance = LUA->GetNumber();
 
-    // Update the rich presence
-    discordP.state = dState;
-    discordP.details = dDetails;
-    discordP.largeImageKey = dImage;
-    discordP.largeImageText = dSubtitle;
-    discordP.partyId = "hahalolparty";
-    discordP.partySize = dPlayers;
-    discordP.partyMax = dMaxPlayers;
     Discord_UpdatePresence(&discordP);
-
-    // Return 0 arguments to lua
-    return 0;
-}
-
-LUA_FUNCTION(UpdateDiscordStatus_Elapsed) {
-
-    // Read the arguments from the lua function
-    const char *dState = LUA->GetString(1);
-    const char *dDetails = LUA->GetString(2);
-    const char *dImage = LUA->GetString(3);
-    const char *dSubtitle = LUA->GetString(4);
-    const int dPlayers = LUA->GetNumber(5);
-    const int dMaxPlayers = LUA->GetNumber(6);
-    const int64_t dTime = LUA->GetNumber(7);
-    const char *dPartyId = LUA->GetString(8);
-    const char *dJoinSecret = LUA->GetString(9);
-    const char *dSpectateSecret = LUA->GetString(10);
-
-    // Prepare rich presence
-    DiscordRichPresence discordP;
-    memset(&discordP, 0, sizeof(discordP));
-
-    // Update the rich presence
-    discordP.state = dState;
-    discordP.details = dDetails;
-    discordP.largeImageKey = dImage;
-    discordP.largeImageText = dSubtitle;
-    if (dPartyId != NULL) {
-        discordP.partyId = dPartyId;
-    } else {
-        discordP.partyId = "hahalolparty";
-    }
-    discordP.partySize = dPlayers;
-    discordP.partyMax = dMaxPlayers;
-    discordP.startTimestamp = dTime;
-    if (dJoinSecret != NULL) {
-        discordP.joinSecret = dJoinSecret;
-    }
-    if (dSpectateSecret != NULL) {
-        discordP.spectateSecret = dSpectateSecret;
-    }
-    Discord_UpdatePresence(&discordP);
-
-    // Return 0 arguments to lua
     return 0;
 }
 
@@ -250,18 +197,8 @@ GMOD_MODULE_OPEN() {
     LUA->Pop();
 
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-    LUA->PushCFunction(UpdateDiscordStatus_Basic);
-    LUA->SetField(-2, "DiscordRPCBasic");
-    LUA->Pop();
-
-    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-    LUA->PushCFunction(UpdateDiscordStatus_Players);
-    LUA->SetField(-2, "DiscordRPCPlayers");
-    LUA->Pop();
-
-    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-    LUA->PushCFunction(UpdateDiscordStatus_Elapsed);
-    LUA->SetField(-2, "DiscordRPCTime");
+    LUA->PushCFunction(UpdateDiscordStatus);
+    LUA->SetField(-2, "DiscordUpdateRPC");
     LUA->Pop();
 
     return 0;
