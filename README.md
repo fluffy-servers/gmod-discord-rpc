@@ -1,22 +1,32 @@
-# Garry's Mod Discord Rich Presence
- Provides Discord Rich Presence support to Garry's Mod
- 
- In June 2018, Discord broke updating this through HTTP; so any Lua-based implementations of this are no longer possible. However, it is still possible (however impractical for servers) to use Rich Presence by using a binary module.
+# GDiscord
+#### Discord Rich Presence for Garry's Mod
 
-## Installation
-### Binary Module (Clients)
-Clients need to put the *gmcl_gdiscord_\*.dll* corresponding to the game's version in **lua/bin/**
+This addon provides Discord RPC support for Garry's Mod, through the use of a binary module. For this addon to work, a Lua script is required on servers to sync information, and a binary module is required on clients.
 
-### LUA Addon (Servers)
-Servers need to install a Lua script that syncs the game details to Discord.
-This can optionally be installed by players for support of single player or P2P games.
+In June 2018, Discord broke updating this through HTTP; so any Lua-based implementations of this are no longer possible. However, it is still possible (however impractical for servers) to use Rich Presence by using a binary module.
 
-This .lua file needs to go in lua/autorun/client/
-Installing this file on the server will have no effect on clients who do not have the required module installed.
+## For Clients
+Download the latest version of the GDiscord module from the [releases page](https://github.com/fluffy-servers/gmod-discord-rpc/releases). 
+The module you need depends on what OS and version you're running (eg. Windows on 32-bit should download **gmcl_gdiscord_win32.dll**). If you're running the 64-bit beta, make sure you download the 64.dll!
 
-## Configuration
-### Setting up an Application
-The first step is to set up a Discord application so you can slightly customise the display
+Copy this into **lua/bin/**. That's all!
+
+With this module installed, your Discord status should automatically update when playing on supported servers.
+
+## For Servers
+Please note that for this to work, **all** clients *will* need to install the binary module.
+
+Download the latest version of cl_discord.lua from the [releases page](https://github.com/fluffy-servers/gmod-discord-rpc/releases).
+
+Copy this into **lua/autorun/client**.
+
+### Configuration
+For best results, server owners need to edit cl_discord.lua for server-specific configuration.
+
+You ***should not*** edit or rename the binary module. Please keep this as gdiscord, so clients can use one module across all supported servers!
+
+#### Setting up an Application
+The first step is to set up a Discord application so you can slightly customise the display. This application contains the map images that will be displayed in Discord.
 
 Create an application over at https://discordapp.com/developers/
 
@@ -24,30 +34,14 @@ Go into Rich Presence > Art Assets and upload images of each map you want, along
 
 Copy the Client ID from General Information.
 
-### Configuration
+#### Lua File
 Open up the .lua file and change the following variables as needed:
  - *discord_id* should be the Client ID you obtained earlier
  - *refresh_time* should be how frequently you want the display to update
  
- ### Default Map Image
- In order to display a default map image, you'll need to painfully create a list of which maps you have icons for.
- Put them into the *map_list* table.
- 
- Once that's done, ensure that *map_restrict* is set to true. Change *map_default* to the name of whatever the default icon should be.
+#### Default Map Image
+To display a default map image, the script needs to know which maps you have specific icons for. There's no way for the Lua script to know what you've uploaded to Discord, so this is a manual process. Sorry.
 
-## Building the .dll
-### Windows
-1. Open Visual Studio 2019 and clone this repository
-2. The default configuration should be "x86-Release" for the 32bit version\
-If you want the 64bit version select the "x64-Release" configuration
-3. Select `Build` -> `Build All`
-4. The .dll should now be in `gmod-discord-rpc/cpp/build/\*-Release/`
-### Linux
-1. Make sure you have git, cmake, and gcc installed
-2. Open a terminal and run
-```git clone https://github.com/fluffy-servers/gmod-discord-rpc --recursive
-cd gmod-discord-rpc/cpp
-mkdir build && cd build
-cmake .. && cmake --build .
-```
-3. The .dll should now be in `gmod-discord-rpc/cpp/build/`
+Put all the maps you have images for into the *map_list* table. Once that's done, change *map_restrict* to true, and set *map_default* to the name of whatever the default icon should be.
+
+**If you have images uploaded for every map in your rotation, you don't need to worry about this step.**
