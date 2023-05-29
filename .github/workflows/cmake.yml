@@ -105,3 +105,29 @@ jobs:
       with:
         name: "gmcl_gdiscord_linux64.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
+        
+  mac64:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE/cpp -D64BIT=ON
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target gdiscord
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: "gmcl_gdiscord_mac64.dll"
+        path: ${{runner.workspace}}/build/gmcl_gdiscord_mac64.dll
