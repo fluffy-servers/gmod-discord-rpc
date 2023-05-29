@@ -130,4 +130,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: "gmcl_gdiscord_mac64.dll"
-        path: ${{runner.workspace}}/build/gmcl_gdiscord_mac64.dll
+        path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
