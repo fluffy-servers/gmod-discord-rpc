@@ -175,6 +175,36 @@ LUA_FUNCTION(UpdateDiscordStatus) {
     LUA->GetField(1, "instance");
     discordP.instance = LUA->GetNumber();
 
+    LUA->GetField(1, "buttonPrimaryLabel");
+    if (LUA->GetType(-1) == GarrysMod::Lua::Type::String) {
+        DiscordRichPresenceButton button;
+
+        button.label = LUA->GetString();
+
+        LUA->GetField(1, "buttonPrimaryUrl");
+        LUA->CheckString();
+
+        button.url = LUA->GetString();
+
+        
+        discordP.buttons[0] = &button;
+    }
+
+    LUA->GetField(1, "buttonSecondaryLabel");
+    if (LUA->GetType(-1) == GarrysMod::Lua::Type::String) {
+        DiscordRichPresenceButton button;
+
+        button.label = LUA->GetString();
+
+        LUA->GetField(1, "buttonSecondaryUrl");
+        LUA->CheckString();
+
+        button.url = LUA->GetString();
+
+        #pragma warning(disable: 6201)
+        discordP.buttons[1] = &button;
+    }
+
     Discord_UpdatePresence(&discordP);
     return 0;
 }
