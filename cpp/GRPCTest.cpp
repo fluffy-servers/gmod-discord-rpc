@@ -186,7 +186,7 @@ LUA_FUNCTION(UpdateDiscordStatus) {
 
         button.url = LUA->GetString();
 
-        
+    
         discordP.buttons[0] = &button;
     }
 
@@ -201,7 +201,7 @@ LUA_FUNCTION(UpdateDiscordStatus) {
 
         button.url = LUA->GetString();
 
-        #pragma warning(disable: 6201)
+#pragma warning(disable : 6201)
         discordP.buttons[1] = &button;
     }
 
