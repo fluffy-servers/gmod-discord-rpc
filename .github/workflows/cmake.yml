@@ -25,7 +25,7 @@ jobs:
         }
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: 'true'
 
@@ -45,7 +45,7 @@ jobs:
       run: cmake --build . --target gdiscord --config MinSizeRel
 
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{matrix.config.artifact}}
         path: ${{runner.workspace}}\build\MinSizeRel\${{matrix.config.artifact}}
@@ -53,7 +53,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: 'true'
 
@@ -75,7 +75,7 @@ jobs:
       run: cmake --build . --target gdiscord
 
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: "gmcl_gdiscord_linux.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux.dll
@@ -83,7 +83,7 @@ jobs:
   linux64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: 'true'
 
@@ -101,7 +101,7 @@ jobs:
       run: cmake --build . --target gdiscord
 
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: "gmcl_gdiscord_linux64.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
@@ -109,7 +109,7 @@ jobs:
   mac64:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: 'true'
 
@@ -127,7 +127,7 @@ jobs:
       run: cmake --build . --target gdiscord
 
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: "gmcl_gdiscord_mac64.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
