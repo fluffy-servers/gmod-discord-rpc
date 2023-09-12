@@ -186,7 +186,6 @@ LUA_FUNCTION(UpdateDiscordStatus) {
 
         button.url = LUA->GetString();
 
-    
         discordP.buttons[0] = &button;
     }
 
