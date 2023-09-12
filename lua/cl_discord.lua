@@ -30,6 +30,14 @@ function DiscordUpdate()
             end
         else
             rpc_data["state"] = string.Replace(ip, ":27015", "")
+
+            -- Add join button
+            rpc_data["buttonPrimaryLabel"] = "Join Server"
+            rpc_data["buttonPrimaryUrl"] = "steam://connect/" .. ip
+
+            -- Add a second button
+            -- rpc_data["buttonSecondaryLabel"] = "Join Server"
+            -- rpc_data["buttonSecondaryUrl"] = "steam://connect/" .. ip
         end
     end
 

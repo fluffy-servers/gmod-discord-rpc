@@ -1,6 +1,6 @@
 [submodule "cpp/discord-rpc"]
 	path = cpp/discord-rpc
-	url = https://github.com/discord/discord-rpc
+	url = https://github.com/cborac/discord-rpc
 [submodule "cpp/gmod-module-base"]
 	path = cpp/gmod-module-base
 	url = https://github.com/Facepunch/gmod-module-base
