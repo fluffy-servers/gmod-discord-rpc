@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <utility>
+#include <vector>
+
+#define DISCORD_RPC_VERSION 1, 2, 1
 
 DiscordUser cbConUser;
 std::pair<int, char> cbDisconnected;
@@ -211,6 +214,14 @@ LUA_FUNCTION(UpdateDiscordStatus) {
 }
 
 GMOD_MODULE_OPEN() {
+    // Set the current version as a vector
+    std::vector<int> version = {DISCORD_RPC_VERSION};
+
+    Vector semver;
+    semver.x = version[0];
+    semver.y = version[1];
+    semver.z = version[2];
+
     // Create the functions
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(StartDiscordStatus);
@@ -230,6 +241,11 @@ GMOD_MODULE_OPEN() {
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(UpdateDiscordStatus);
     LUA->SetField(-2, "DiscordUpdateRPC");
+    LUA->Pop();
+
+    LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+    LUA->PushVector(semver);
+    LUA->SetField(-2, "DiscordRPCVersion");
     LUA->Pop();
 
     return 0;
