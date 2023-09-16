@@ -2,6 +2,7 @@
 #include "GarrysMod/Lua/Interface.h"
 #include "discord_rpc.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <utility>
 
@@ -175,33 +176,34 @@ LUA_FUNCTION(UpdateDiscordStatus) {
     LUA->GetField(1, "instance");
     discordP.instance = LUA->GetNumber();
 
-    LUA->GetField(1, "buttonPrimaryLabel");
-    if (LUA->GetType(-1) == GarrysMod::Lua::Type::String) {
-        DiscordRichPresenceButton button;
+    int buttonI = 0;
 
-        button.label = LUA->GetString();
+    LUA->GetField(1, "buttonPrimaryLabel");
+    if (LUA->GetString() != NULL) {
+        discordP.buttons[buttonI] = (DiscordRichPresenceButton *)malloc(
+            sizeof(DiscordRichPresenceButton));
+
+        discordP.buttons[buttonI]->label = LUA->GetString();
 
         LUA->GetField(1, "buttonPrimaryUrl");
         LUA->CheckString();
 
-        button.url = LUA->GetString();
+        discordP.buttons[buttonI]->url = LUA->GetString();
 
-        discordP.buttons[0] = &button;
+        buttonI += 1;
     }
 
     LUA->GetField(1, "buttonSecondaryLabel");
-    if (LUA->GetType(-1) == GarrysMod::Lua::Type::String) {
-        DiscordRichPresenceButton button;
+    if (LUA->GetString() != NULL) {
+        discordP.buttons[buttonI] = (DiscordRichPresenceButton *)malloc(
+            sizeof(DiscordRichPresenceButton));
 
-        button.label = LUA->GetString();
+        discordP.buttons[buttonI]->label = LUA->GetString();
 
         LUA->GetField(1, "buttonSecondaryUrl");
         LUA->CheckString();
 
-        button.url = LUA->GetString();
-
-#pragma warning(disable : 6201)
-        discordP.buttons[1] = &button;
+        discordP.buttons[buttonI]->url = LUA->GetString();
     }
 
     Discord_UpdatePresence(&discordP);
