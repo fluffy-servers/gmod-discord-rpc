@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#define DISCORD_RPC_VERSION 1, 2, 1
+#define DISCORD_RPC_VERSION 121
 
 DiscordUser cbConUser;
 std::pair<int, char> cbDisconnected;
@@ -214,14 +214,6 @@ LUA_FUNCTION(UpdateDiscordStatus) {
 }
 
 GMOD_MODULE_OPEN() {
-    // Set the current version as a vector
-    std::vector<int> version = {DISCORD_RPC_VERSION};
-
-    Vector semver;
-    semver.x = version[0];
-    semver.y = version[1];
-    semver.z = version[2];
-
     // Create the functions
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
     LUA->PushCFunction(StartDiscordStatus);
@@ -243,8 +235,9 @@ GMOD_MODULE_OPEN() {
     LUA->SetField(-2, "DiscordUpdateRPC");
     LUA->Pop();
 
+    // Set the current version of the module
     LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-    LUA->PushVector(semver);
+    LUA->PushNumber(DISCORD_RPC_VERSION);
     LUA->SetField(-2, "DiscordRPCVersion");
     LUA->Pop();
 
