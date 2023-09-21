@@ -3,10 +3,10 @@ name: CMake Build
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   windows:
@@ -105,7 +105,7 @@ jobs:
       with:
         name: "gmcl_gdiscord_linux64.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll
-        
+
   mac64:
     runs-on: macos-latest
     steps:
@@ -129,5 +129,5 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: "gmcl_gdiscord_mac64.dll"
+        name: "gmcl_gdiscord_osx64.dll"
         path: ${{runner.workspace}}/build/gmcl_gdiscord_linux64.dll

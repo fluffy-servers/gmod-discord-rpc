@@ -3,11 +3,11 @@ name: Clang Format
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
-    
+    - main
+
 jobs:
   lua_lint:
     runs-on: ubuntu-latest
