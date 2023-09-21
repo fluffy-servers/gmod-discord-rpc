@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <utility>
-#include <vector>
 
 #define DISCORD_RPC_VERSION 121
 
