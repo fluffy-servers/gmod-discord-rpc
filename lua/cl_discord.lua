@@ -1,6 +1,8 @@
--- This requires a special module to be installed before it works correctly
--- Sorry to disappoint you
-if file.Find("lua/bin/gmcl_gdiscord_*.dll", "GAME")[1] == nil then return end
+if not util.IsBinaryModuleInstalled("gdiscord") then
+    print("This session supports GDiscord Rich Presence, but you do not have the module installed.")
+    print("See https://github.com/fluffy-servers/gmod-discord-rpc for more info.")
+    return
+end
 require("gdiscord")
 
 -- Configuration
